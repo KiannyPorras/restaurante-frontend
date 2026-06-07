@@ -10,16 +10,26 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from '@/components/ui/sidebar'
 import { Input } from '@/components/ui/input'
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import {
   Pizza,
   LayoutDashboard,
-  UtensilsCrossed,
   Settings,
   ChevronUp,
+  ChevronRight,
   HelpCircle,
   Search,
+  BookOpen,
+  UserCheck,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -28,29 +38,21 @@ export function AppSidebar() {
   const currentPath = routerState.location.pathname
   const [searchQuery, setSearchQuery] = useState('')
 
-  const menuItems = [
-    {
-      name: 'Panel Principal',
-      path: '/dashboard',
-      icon: LayoutDashboard,
-    },
-    {
-      name: 'Menú Demo Suite',
-      path: '/dashboard/demo',
-      icon: UtensilsCrossed,
-    },
-  ]
-
   const secondaryItems = [
     {
       name: 'Configuración',
       path: '#',
-      icon: Settings,
+      icon: UserCheck,
     },
     {
       name: 'Soporte y Ayuda',
       path: '#',
       icon: HelpCircle,
+    },
+    {
+      name: 'Documentación',
+      path: '#',
+      icon: BookOpen,
     },
   ]
 
@@ -89,64 +91,74 @@ export function AppSidebar() {
           </div>
         </div>
 
-        {/* Grupo 1: Navegación Principal */}
+        {/* Grupo 1: Navegación Principal (Acordeón de Operaciones) */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-zinc-400 dark:text-zinc-500 font-bold uppercase text-[10px] tracking-wider px-3 group-data-[collapsible=icon]:hidden">
             Plataforma
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
-              {menuItems.map((item) => {
-                const Icon = item.icon
-                const isActive = currentPath === item.path
-                return (
-                  <SidebarMenuItem key={item.name}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive}
-                      tooltip={item.name}
-                      className={`w-full justify-start gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                        isActive
-                          ? 'bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400'
-                          : 'text-zinc-650 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-350'
-                      }`}
-                    >
-                      <Link to={item.path}>
-                        <Icon className="h-4 w-4 shrink-0" />
-                        <span className="group-data-[collapsible=icon]:hidden">{item.name}</span>
-                      </Link>
+            <SidebarMenu>
+              <Collapsible asChild defaultOpen={true} className="group/collapsible">
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip="Operaciones" className="w-full text-zinc-700 dark:text-zinc-350">
+                      <LayoutDashboard className="h-4 w-4 shrink-0" />
+                      <span className="group-data-[collapsible=icon]:hidden">Operaciones</span>
+                      <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 group-data-[collapsible=icon]:hidden" />
                     </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild isActive={currentPath === '/dashboard'}>
+                          <Link to="/dashboard">
+                            <span>Panel Principal</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Grupo 2: Sistema */}
-        <SidebarGroup className="mt-4">
+        {/* Grupo 2: Sistema (Acordeón de Ajustes) */}
+        <SidebarGroup className="mt-2">
           <SidebarGroupLabel className="text-zinc-400 dark:text-zinc-500 font-bold uppercase text-[10px] tracking-wider px-3 group-data-[collapsible=icon]:hidden">
             Sistema
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
-              {secondaryItems.map((item) => {
-                const Icon = item.icon
-                return (
-                  <SidebarMenuItem key={item.name}>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={item.name}
-                      className="w-full justify-start gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-350 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-                    >
-                      <Link to={item.path}>
-                        <Icon className="h-4 w-4 shrink-0" />
-                        <span className="group-data-[collapsible=icon]:hidden">{item.name}</span>
-                      </Link>
+            <SidebarMenu>
+              <Collapsible asChild defaultOpen={false} className="group/collapsible">
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip="Ajustes" className="w-full text-zinc-700 dark:text-zinc-350">
+                      <Settings className="h-4 w-4 shrink-0" />
+                      <span className="group-data-[collapsible=icon]:hidden">Ajustes</span>
+                      <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 group-data-[collapsible=icon]:hidden" />
                     </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {secondaryItems.map((item) => {
+                        const Icon = item.icon
+                        return (
+                          <SidebarMenuSubItem key={item.name}>
+                            <SidebarMenuSubButton asChild>
+                              <a href={item.path}>
+                                <Icon className="h-3.5 w-3.5 mr-1 shrink-0" />
+                                <span>{item.name}</span>
+                              </a>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        )
+                      })}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
