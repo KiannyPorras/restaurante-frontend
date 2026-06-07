@@ -23,7 +23,7 @@ export function LoginForm() {
   })
 
   return (
-    <Card className="bg-[#101D1A] border border-[rgba(196,154,84,0.2)] w-full max-w-sm text-[#F2E9DB] shadow-2xl p-2">
+    <Card className="bg-[#112128] border border-[rgba(196,154,84,0.2)] w-full max-w-sm text-[#FFFFFF] shadow-2xl p-2">
       <CardHeader className="items-center space-y-3 pb-6 text-center">
         <div>
           <CardTitle className="font-bold text-[#C49A54] text-xl font-serif tracking-tight">
@@ -74,7 +74,7 @@ export function LoginForm() {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="admin"
-                  className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
+                  className="bg-[#0B1519] border-[rgba(196,154,84,0.2)] text-[#FFFFFF] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                   disabled={loginMutation.isPending}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
@@ -106,7 +106,7 @@ export function LoginForm() {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="••••••••"
-                  className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
+                  className="bg-[#0B1519] border-[rgba(196,154,84,0.2)] text-[#FFFFFF] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                   disabled={loginMutation.isPending}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
@@ -125,7 +125,7 @@ export function LoginForm() {
               <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting || loginMutation.isPending}
-                className="mt-6 w-full cursor-pointer bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold transition-colors duration-200 border-none h-10 text-xs"
+                className="mt-6 w-full cursor-pointer bg-[#C49A54] hover:bg-[#A98245] text-[#0E1B21] font-semibold transition-colors duration-200 border-none h-10 text-xs"
               >
                 {loginMutation.isPending ? (
                   <div className="flex justify-center items-center gap-1.5">

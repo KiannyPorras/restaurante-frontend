@@ -58,19 +58,19 @@ export function CreateTableSheet({ isOpen, onOpenChange }: CreateTableSheetProps
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-md bg-[#101D1A] border-l border-[rgba(196,154,84,0.2)] text-[#F2E9DB]">
+      <SheetContent className="sm:max-w-md bg-[#112128] border-l border-[rgba(196,154,84,0.2)] text-white">
         <SheetHeader className="pb-6 border-b border-[rgba(196,154,84,0.1)]">
           <SheetTitle className="text-[#C49A54] font-display text-lg">Nueva Mesa</SheetTitle>
-          <SheetDescription className="text-xs text-[#9D9A91]">
+          <SheetDescription className="text-xs text-[#9CA3AF]">
             Registra una nueva mesa física y configúrala bajo una sección.
           </SheetDescription>
         </SheetHeader>
 
         {sections.length === 0 && !isLoadingSections ? (
-          <div className="p-6 border border-dashed border-[rgba(196,154,84,0.2)] bg-[#0B1715]/40 rounded-lg text-center space-y-4 mt-6">
-            <p className="text-xs text-[#9D9A91]">Antes debes crear al menos una sección.</p>
+          <div className="p-6 border border-dashed border-[rgba(196,154,84,0.2)] bg-[#0B1519]/40 rounded-lg text-center space-y-4 mt-6">
+            <p className="text-xs text-[#9CA3AF]">Antes debes crear al menos una sección.</p>
             <Link to="/dashboard/sections" onClick={() => onOpenChange(false)}>
-              <Button size="sm" className="bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold text-xs transition-colors duration-200">
+              <Button size="sm" className="bg-[#C49A54] hover:bg-[#A98245] text-[#0E1B21] font-semibold text-xs transition-colors duration-200">
                 Configurar Secciones
               </Button>
             </Link>
@@ -108,7 +108,7 @@ export function CreateTableSheet({ isOpen, onOpenChange }: CreateTableSheetProps
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="Ej. 12, VIP-1"
-                    className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
+                    className="bg-[#0B1519] border-[rgba(196,154,84,0.2)] text-white placeholder-[#9CA3AF]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                     disabled={createMutation.isPending}
                   />
                   {field.state.meta.isTouched && field.state.meta.errors.length ? (
@@ -145,7 +145,7 @@ export function CreateTableSheet({ isOpen, onOpenChange }: CreateTableSheetProps
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="Ej. 4"
-                    className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
+                    className="bg-[#0B1519] border-[rgba(196,154,84,0.2)] text-white placeholder-[#9CA3AF]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                     disabled={createMutation.isPending}
                   />
                   {field.state.meta.isTouched && field.state.meta.errors.length ? (
@@ -174,7 +174,7 @@ export function CreateTableSheet({ isOpen, onOpenChange }: CreateTableSheetProps
                     name={field.name}
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    className="w-full flex h-10 rounded-md border border-[rgba(196,154,84,0.2)] bg-[#0B1715] text-[#F2E9DB] px-3 py-1 text-xs focus:ring-[#C49A54] focus:border-[#C49A54] disabled:opacity-50 cursor-pointer"
+                    className="w-full flex h-10 rounded-md border border-[rgba(196,154,84,0.2)] bg-[#0B1519] text-white px-3 py-1 text-xs focus:ring-[#C49A54] focus:border-[#C49A54] disabled:opacity-50 cursor-pointer"
                     disabled={createMutation.isPending || isLoadingSections}
                   >
                     {sections.map((s) => (
@@ -205,14 +205,14 @@ export function CreateTableSheet({ isOpen, onOpenChange }: CreateTableSheetProps
                       onOpenChange(false)
                     }}
                     disabled={createMutation.isPending}
-                    className="flex-1 bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] hover:bg-[#101D1A] hover:text-[#C49A54] text-xs h-10"
+                    className="flex-1 bg-[#0B1519] border-[rgba(196,154,84,0.2)] text-white hover:bg-[#112128] hover:text-[#C49A54] text-xs h-10"
                   >
                     Cancelar
                   </Button>
                   <Button
                     type="submit"
                     disabled={!canSubmit || isSubmitting || createMutation.isPending}
-                    className="flex-1 bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold transition-colors duration-200 border-none text-xs h-10"
+                    className="flex-1 bg-[#C49A54] hover:bg-[#A98245] text-[#0E1B21] font-semibold transition-colors duration-200 border-none text-xs h-10"
                   >
                     {createMutation.isPending ? (
                       <div className="flex items-center justify-center gap-1.5">

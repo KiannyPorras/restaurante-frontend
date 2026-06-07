@@ -79,11 +79,11 @@ export function DashboardHome() {
   ]
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto bg-[#07110F] text-[#F2E9DB] p-1">
+    <div className="space-y-6 max-w-7xl mx-auto bg-[#0E1B21] text-white p-1">
       {/* Cabecera del Dashboard */}
       <div>
         <h1 className="text-2xl font-bold tracking-wide text-[#C49A54] font-display">Resumen Operativo</h1>
-        <p className="text-xs text-[#9D9A91] mt-1">
+        <p className="text-xs text-[#9CA3AF] mt-1">
           Métricas clave y estado de la cocina en tiempo real.
         </p>
       </div>
@@ -93,10 +93,10 @@ export function DashboardHome() {
         {stats.map((stat) => {
           const Icon = stat.icon
           return (
-            <Card key={stat.title} className="border border-[rgba(196,154,84,0.20)] bg-[#101D1A] text-[#F2E9DB] shadow-md hover:border-[#C49A54]/50 transition-all duration-300">
+            <Card key={stat.title} className="border border-[rgba(196,154,84,0.20)] bg-[#112128] text-white shadow-md hover:border-[#C49A54]/50 transition-all duration-300">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between pb-2">
-                  <span className="text-xs font-semibold text-[#9D9A91] uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-[#9CA3AF] uppercase tracking-wider">
                     {stat.title}
                   </span>
                   <Icon className="h-4 w-4 text-[#C49A54]" />
@@ -105,7 +105,7 @@ export function DashboardHome() {
                   <span className="text-2xl font-bold tracking-tight text-[#C49A54]">
                     {stat.value}
                   </span>
-                  <span className="text-[10px] text-[#9D9A91]">
+                  <span className="text-[10px] text-[#9CA3AF]">
                     {stat.description}
                   </span>
                 </div>
@@ -119,33 +119,33 @@ export function DashboardHome() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Tabla de Ordenes Recientes */}
-        <Card className="lg:col-span-2 border border-[rgba(196,154,84,0.20)] bg-[#101D1A] text-[#F2E9DB] shadow-md">
+        <Card className="lg:col-span-2 border border-[rgba(196,154,84,0.20)] bg-[#112128] text-white shadow-md">
           <CardHeader>
-            <CardTitle className="text-base font-bold text-[#F2E9DB]">Últimas Órdenes</CardTitle>
-            <CardDescription className="text-xs text-[#9D9A91]">Lista de pedidos procesados y en cola.</CardDescription>
+            <CardTitle className="text-base font-bold text-white">Últimas Órdenes</CardTitle>
+            <CardDescription className="text-xs text-[#9CA3AF]">Lista de pedidos procesados y en cola.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="rounded-md border border-[rgba(196,154,84,0.15)] overflow-hidden bg-[#07110F]">
+            <div className="rounded-md border border-[rgba(196,154,84,0.15)] overflow-hidden bg-[#0E1B21]">
               <Table>
-                <TableHeader className="bg-[#0B1715]">
-                  <TableRow className="border-b border-[rgba(196,154,84,0.15)] hover:bg-[#0B1715]">
-                    <TableHead className="w-[100px] text-[#9D9A91] text-xs font-semibold border-none">Pedido</TableHead>
-                    <TableHead className="text-[#9D9A91] text-xs font-semibold border-none">Cliente</TableHead>
-                    <TableHead className="hidden md:table-cell text-[#9D9A91] text-xs font-semibold border-none">Platos</TableHead>
-                    <TableHead className="text-[#9D9A91] text-xs font-semibold border-none">Estado</TableHead>
-                    <TableHead className="text-right text-[#9D9A91] text-xs font-semibold border-none">Total</TableHead>
+                <TableHeader className="bg-[#0B1519]">
+                  <TableRow className="border-b border-[rgba(196,154,84,0.15)] hover:bg-[#0B1519]">
+                    <TableHead className="w-[100px] text-[#9CA3AF] text-xs font-semibold border-none">Pedido</TableHead>
+                    <TableHead className="text-[#9CA3AF] text-xs font-semibold border-none">Cliente</TableHead>
+                    <TableHead className="hidden md:table-cell text-[#9CA3AF] text-xs font-semibold border-none">Platos</TableHead>
+                    <TableHead className="text-[#9CA3AF] text-xs font-semibold border-none">Estado</TableHead>
+                    <TableHead className="text-right text-[#9CA3AF] text-xs font-semibold border-none">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {recentOrders.map((order) => (
-                    <TableRow key={order.id} className="hover:bg-[#0B1715]/40 border-b border-[rgba(196,154,84,0.08)] transition-colors duration-150">
+                    <TableRow key={order.id} className="hover:bg-[#0B1519]/40 border-b border-[rgba(196,154,84,0.08)] transition-colors duration-150">
                       <TableCell className="font-mono text-xs font-semibold text-[#C49A54] border-none">
                         {order.id}
                       </TableCell>
-                      <TableCell className="text-xs font-medium text-[#F2E9DB] border-none">
+                      <TableCell className="text-xs font-medium text-white border-none">
                         {order.customer}
                       </TableCell>
-                      <TableCell className="hidden md:table-cell text-xs text-[#9D9A91] border-none">
+                      <TableCell className="hidden md:table-cell text-xs text-[#9CA3AF] border-none">
                         {order.items}
                       </TableCell>
                       <TableCell className="border-none">
@@ -165,20 +165,20 @@ export function DashboardHome() {
         </Card>
 
         {/* Sección de Estado Operativo de la Cocina */}
-        <Card className="border border-[rgba(196,154,84,0.20)] bg-[#101D1A] text-[#F2E9DB] shadow-md">
+        <Card className="border border-[rgba(196,154,84,0.20)] bg-[#112128] text-white shadow-md">
           <CardHeader>
-            <CardTitle className="text-base font-bold text-[#F2E9DB]">Estado de Cocina</CardTitle>
-            <CardDescription className="text-xs text-[#9D9A91]">Capacidad y asignación de mesas.</CardDescription>
+            <CardTitle className="text-base font-bold text-white">Estado de Cocina</CardTitle>
+            <CardDescription className="text-xs text-[#9CA3AF]">Capacidad y asignación de mesas.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             
             {/* Barra de progreso 1: Mesas */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-medium">
-                <span className="text-[#9D9A91]">Ocupación de Salón</span>
-                <span className="text-[#F2E9DB]">18 / 24 mesas (75%)</span>
+                <span className="text-[#9CA3AF]">Ocupación de Salón</span>
+                <span className="text-white">18 / 24 mesas (75%)</span>
               </div>
-              <div className="h-1.5 w-full bg-[#0B1715] rounded-full overflow-hidden border border-[rgba(196,154,84,0.1)]">
+              <div className="h-1.5 w-full bg-[#0B1519] rounded-full overflow-hidden border border-[rgba(196,154,84,0.1)]">
                 <div className="h-full bg-[#C49A54] rounded-full" style={{ width: '75%' }} />
               </div>
             </div>
@@ -186,10 +186,10 @@ export function DashboardHome() {
             {/* Barra de progreso 2: Capacidad Cocina */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-medium">
-                <span className="text-[#9D9A91]">Capacidad de Cocina</span>
-                <span className="text-[#F2E9DB]">Media (45%)</span>
+                <span className="text-[#9CA3AF]">Capacidad de Cocina</span>
+                <span className="text-white">Media (45%)</span>
               </div>
-              <div className="h-1.5 w-full bg-[#0B1715] rounded-full overflow-hidden border border-[rgba(196,154,84,0.1)]">
+              <div className="h-1.5 w-full bg-[#0B1519] rounded-full overflow-hidden border border-[rgba(196,154,84,0.1)]">
                 <div className="h-full bg-[#C49A54] rounded-full" style={{ width: '45%' }} />
               </div>
             </div>
@@ -199,15 +199,15 @@ export function DashboardHome() {
               <div className="flex gap-3 items-start text-xs">
                 <CheckCircle2 className="h-4 w-4 text-[#C49A54] shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-[#F2E9DB]">Mesa 4 liberada</p>
-                  <p className="text-[10px] text-[#9D9A91] mt-0.5">Hace 5 minutos</p>
+                  <p className="font-semibold text-white">Mesa 4 liberada</p>
+                  <p className="text-[10px] text-[#9CA3AF] mt-0.5">Hace 5 minutos</p>
                 </div>
               </div>
               <div className="flex gap-3 items-start text-xs">
                 <CheckCircle2 className="h-4 w-4 text-[#C49A54] shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-[#F2E9DB]">Pedido #ORD-3101 entregado</p>
-                  <p className="text-[10px] text-[#9D9A91] mt-0.5">Hace 12 minutos</p>
+                  <p className="font-semibold text-white">Pedido #ORD-3101 entregado</p>
+                  <p className="text-[10px] text-[#9CA3AF] mt-0.5">Hace 12 minutos</p>
                 </div>
               </div>
             </div>

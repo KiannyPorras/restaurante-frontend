@@ -50,7 +50,7 @@ export function EditZoneSheet({ isOpen, onOpenChange, zone }: EditZoneSheetProps
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-md bg-[#101D1A] border-l border-[rgba(196,154,84,0.2)] text-[#F2E9DB]">
+      <SheetContent className="sm:max-w-md bg-[#112128] border-l border-[rgba(196,154,84,0.2)] text-[#FFFFFF]">
         <SheetHeader className="pb-6 border-b border-[rgba(196,154,84,0.1)]">
           <SheetTitle className="text-[#C49A54] font-display text-lg">Editar Zona</SheetTitle>
           <SheetDescription className="text-xs text-[#9D9A91]">
@@ -89,7 +89,7 @@ export function EditZoneSheet({ isOpen, onOpenChange, zone }: EditZoneSheetProps
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="Ej. Terraza Exterior"
-                  className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
+                  className="bg-[#0B1519] border-[rgba(196,154,84,0.2)] text-[#FFFFFF] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                   disabled={updateMutation.isPending}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
@@ -114,14 +114,14 @@ export function EditZoneSheet({ isOpen, onOpenChange, zone }: EditZoneSheetProps
                     onOpenChange(false)
                   }}
                   disabled={updateMutation.isPending}
-                  className="flex-1 bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] hover:bg-[#101D1A] hover:text-[#C49A54] text-xs h-10"
+                  className="flex-1 bg-[#0B1519] border-[rgba(196,154,84,0.2)] text-[#FFFFFF] hover:bg-[#112128] hover:text-[#C49A54] text-xs h-10"
                 >
                   Cancelar
                 </Button>
                 <Button
                   type="submit"
                   disabled={!canSubmit || isSubmitting || updateMutation.isPending}
-                  className="flex-1 bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold transition-colors duration-200 border-none text-xs h-10"
+                  className="flex-1 bg-[#C49A54] hover:bg-[#A98245] text-[#0E1B21] font-semibold transition-colors duration-200 border-none text-xs h-10"
                 >
                   {updateMutation.isPending ? (
                     <div className="flex items-center justify-center gap-1.5">

@@ -34,7 +34,7 @@ export function DeleteSectionDialog({ isOpen, onOpenChange, section }: DeleteSec
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="sm:max-w-md bg-[#101D1A] border border-[rgba(196,154,84,0.2)] text-[#F2E9DB] p-6">
+      <AlertDialogContent className="sm:max-w-md bg-[#112128] border border-[rgba(196,154,84,0.2)] text-[#FFFFFF] p-6">
         <AlertDialogHeader className="space-y-3">
           <div className="flex items-center gap-2 text-red-400">
             <AlertTriangle className="h-5 w-5 shrink-0" />
@@ -42,7 +42,7 @@ export function DeleteSectionDialog({ isOpen, onOpenChange, section }: DeleteSec
           </div>
           <AlertDialogDescription className="text-xs text-[#9D9A91] leading-relaxed">
             Esta acción es irreversible. Se eliminará permanentemente la sección{' '}
-            <strong className="text-[#F2E9DB] font-semibold">"{section?.name}"</strong>.
+            <strong className="text-[#FFFFFF] font-semibold">"{section?.name}"</strong>.
             Si existen mesas vinculadas a esta sección, la operación podría fallar.
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -50,7 +50,7 @@ export function DeleteSectionDialog({ isOpen, onOpenChange, section }: DeleteSec
           <AlertDialogCancel
             onClick={() => onOpenChange(false)}
             disabled={deleteMutation.isPending}
-            className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] hover:bg-[#101D1A] hover:text-[#C49A54] text-xs h-9 cursor-pointer"
+            className="bg-[#0B1519] border-[rgba(196,154,84,0.2)] text-[#FFFFFF] hover:bg-[#112128] hover:text-[#C49A54] text-xs h-9 cursor-pointer"
           >
             Cancelar
           </AlertDialogCancel>
