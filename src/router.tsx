@@ -1,5 +1,6 @@
 import { createRootRoute, createRoute, createRouter, Outlet } from '@tanstack/react-router'
 import { Landing } from './routes/Landing'
+import { Login } from './routes/Login'
 import { DashboardLayout } from './routes/dashboard/DashboardLayout'
 import { DashboardHome } from './routes/dashboard/DashboardHome'
 
@@ -15,27 +16,35 @@ const indexRoute = createRoute({
   component: Landing,
 })
 
-// 3. Ruta del Dashboard (Layout General con Sidebar)
+// 3. Ruta de Autenticación (Login)
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/login',
+  component: Login,
+})
+
+// 4. Ruta del Dashboard (Layout General con Sidebar)
 const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/dashboard',
   component: DashboardLayout,
 })
 
-// 4. Ruta Index del Dashboard (En el path `/dashboard/`)
+// 5. Ruta Index del Dashboard (En el path `/dashboard/`)
 const dashboardIndexRoute = createRoute({
   getParentRoute: () => dashboardRoute,
   path: '/',
   component: DashboardHome,
 })
 
-// 5. Creación del árbol de enrutamiento
+// 6. Creación del árbol de enrutamiento
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  loginRoute,
   dashboardRoute.addChildren([dashboardIndexRoute]),
 ])
 
-// 6. Instancia del Enrutador
+// 7. Instancia del Enrutador
 export const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
