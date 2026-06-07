@@ -55,19 +55,21 @@ export function CreateSectionSheet({ isOpen, onOpenChange }: CreateSectionSheetP
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-md bg-card">
-        <SheetHeader className="pb-6">
-          <SheetTitle>Nueva Sección</SheetTitle>
-          <SheetDescription className="text-xs text-muted-foreground">
+      <SheetContent className="sm:max-w-md bg-[#101D1A] border-l border-[rgba(196,154,84,0.2)] text-[#F2E9DB]">
+        <SheetHeader className="pb-6 border-b border-[rgba(196,154,84,0.1)]">
+          <SheetTitle className="text-[#C49A54] font-display text-lg">Nueva Sección</SheetTitle>
+          <SheetDescription className="text-xs text-[#9D9A91]">
             Asocia una sub-área de mesas a una zona del local.
           </SheetDescription>
         </SheetHeader>
 
         {zones.length === 0 && !isLoadingZones ? (
-          <div className="p-4 border border-dashed border-border rounded-lg text-center space-y-2">
-            <p className="text-xs text-muted-foreground">Antes debes crear al menos una zona.</p>
+          <div className="p-6 border border-dashed border-[rgba(196,154,84,0.2)] bg-[#0B1715]/40 rounded-lg text-center space-y-4 mt-6">
+            <p className="text-xs text-[#9D9A91]">Antes debes crear al menos una zona.</p>
             <Link to="/dashboard/zones" onClick={() => onOpenChange(false)}>
-              <Button size="xs" variant="outline">Configurar Zonas</Button>
+              <Button size="sm" className="bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold text-xs transition-colors duration-200">
+                Configurar Zonas
+              </Button>
             </Link>
           </div>
         ) : (
@@ -77,7 +79,7 @@ export function CreateSectionSheet({ isOpen, onOpenChange }: CreateSectionSheetP
               e.stopPropagation()
               form.handleSubmit()
             }}
-            className="space-y-4"
+            className="space-y-6 mt-6"
           >
             {/* Campo: Nombre */}
             <form.Field
@@ -92,8 +94,8 @@ export function CreateSectionSheet({ isOpen, onOpenChange }: CreateSectionSheetP
               }}
             >
               {(field) => (
-                <div className="space-y-1.5">
-                  <Label htmlFor={field.name} className="text-xs font-semibold">
+                <div className="space-y-2">
+                  <Label htmlFor={field.name} className="text-xs font-semibold text-[#C49A54] tracking-wide">
                     Nombre de la Sección
                   </Label>
                   <Input
@@ -103,11 +105,11 @@ export function CreateSectionSheet({ isOpen, onOpenChange }: CreateSectionSheetP
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="Ej. Balcón Izquierdo"
-                    className="bg-background"
+                    className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                     disabled={createMutation.isPending}
                   />
                   {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                    <p className="text-[10px] text-destructive font-medium">
+                    <p className="text-[10px] text-red-400 font-medium">
                       {field.state.meta.errors.join(', ')}
                     </p>
                   ) : null}
@@ -123,8 +125,8 @@ export function CreateSectionSheet({ isOpen, onOpenChange }: CreateSectionSheetP
               }}
             >
               {(field) => (
-                <div className="space-y-1.5">
-                  <Label htmlFor={field.name} className="text-xs font-semibold">
+                <div className="space-y-2">
+                  <Label htmlFor={field.name} className="text-xs font-semibold text-[#C49A54] tracking-wide">
                     Zona del Restaurante
                   </Label>
                   <select
@@ -132,7 +134,7 @@ export function CreateSectionSheet({ isOpen, onOpenChange }: CreateSectionSheetP
                     name={field.name}
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    className="w-full flex h-9 rounded-md border border-input bg-background px-3 py-1 text-xs shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full flex h-10 rounded-md border border-[rgba(196,154,84,0.2)] bg-[#0B1715] text-[#F2E9DB] px-3 py-1 text-xs focus:ring-[#C49A54] focus:border-[#C49A54] disabled:opacity-50 cursor-pointer"
                     disabled={createMutation.isPending || isLoadingZones}
                   >
                     {zones.map((z) => (
@@ -142,7 +144,7 @@ export function CreateSectionSheet({ isOpen, onOpenChange }: CreateSectionSheetP
                     ))}
                   </select>
                   {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                    <p className="text-[10px] text-destructive font-medium">
+                    <p className="text-[10px] text-red-400 font-medium">
                       {field.state.meta.errors.join(', ')}
                     </p>
                   ) : null}
@@ -154,20 +156,34 @@ export function CreateSectionSheet({ isOpen, onOpenChange }: CreateSectionSheetP
               selector={(state) => [state.canSubmit, state.isSubmitting]}
             >
               {([canSubmit, isSubmitting]) => (
-                <Button
-                  type="submit"
-                  disabled={!canSubmit || isSubmitting || createMutation.isPending}
-                  className="w-full mt-6"
-                >
-                  {createMutation.isPending ? (
-                    <div className="flex items-center justify-center gap-1.5">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                      <span>Guardando...</span>
-                    </div>
-                  ) : (
-                    <span>Guardar Sección</span>
-                  )}
-                </Button>
+                <div className="flex gap-3 pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      form.reset()
+                      onOpenChange(false)
+                    }}
+                    disabled={createMutation.isPending}
+                    className="flex-1 bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] hover:bg-[#101D1A] hover:text-[#C49A54] text-xs h-10"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={!canSubmit || isSubmitting || createMutation.isPending}
+                    className="flex-1 bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold transition-colors duration-200 border-none text-xs h-10"
+                  >
+                    {createMutation.isPending ? (
+                      <div className="flex items-center justify-center gap-1.5">
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        <span>Guardando...</span>
+                      </div>
+                    ) : (
+                      <span>Guardar</span>
+                    )}
+                  </Button>
+                </div>
               )}
             </form.Subscribe>
           </form>

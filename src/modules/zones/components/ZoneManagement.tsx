@@ -25,16 +25,39 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Skeleton } from '@/components/ui/skeleton'
 
 // Iconos
-import { Loader2, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertTriangle, MoreHorizontal } from 'lucide-react'
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  AlertTriangle,
+  MoreHorizontal,
+  Search,
+  Map,
+  MapPinned,
+} from 'lucide-react'
 
 export function ZoneManagement() {
   const [page, setPage] = useState(1)
   const pageSize = 10
+  const [searchQuery, setSearchQuery] = useState('')
+  const [sortBy, setSortBy] = useState('id-asc')
 
   // Queries
-  const { data: pagedZones, isLoading, isError, error } = useZonesQuery(page, pageSize)
+  const { data: pagedZones, isLoading, isError } = useZonesQuery(page, pageSize)
 
   // Estados locales para los modales
   const [isCreateOpen, setIsCreateOpen] = useState(false)
@@ -58,17 +81,74 @@ export function ZoneManagement() {
     setIsDeleteOpen(true)
   }
 
+  // Filtrado y ordenamiento local en memoria
+  const filteredData = pagedZones?.data.filter((zone) =>
+    zone.name.toLowerCase().includes(searchQuery.toLowerCase())
+  ) ?? []
+
+  const sortedData = [...filteredData].sort((a, b) => {
+    if (sortBy === 'name-asc') return a.name.localeCompare(b.name)
+    if (sortBy === 'name-desc') return b.name.localeCompare(a.name)
+    if (sortBy === 'id-asc') return a.id - b.id
+    if (sortBy === 'id-desc') return b.id - a.id
+    return 0
+  })
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6 bg-[#07110F] text-[#F2E9DB] p-6 md:p-8 rounded-xl border border-[rgba(196,154,84,0.20)] shadow-2xl">
+        {/* Skeleton Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(196,154,84,0.15)] pb-6">
+          <div className="space-y-2">
+            <Skeleton className="h-7 w-48 bg-[#101D1A]" />
+            <Skeleton className="h-4 w-72 bg-[#101D1A]" />
+          </div>
+          <Skeleton className="h-9 w-28 bg-[#101D1A]" />
+        </div>
+
+        {/* Skeleton Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Skeleton className="h-24 w-full bg-[#101D1A] border border-[rgba(196,154,84,0.1)] rounded-lg" />
+        </div>
+
+        {/* Skeleton Table Card */}
+        <div className="bg-[#101D1A] border border-[rgba(196,154,84,0.20)] rounded-lg p-6 space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-36 bg-[#0B1715]" />
+              <Skeleton className="h-3.5 w-56 bg-[#0B1715]" />
+            </div>
+            <div className="flex gap-3">
+              <Skeleton className="h-9 w-48 bg-[#0B1715]" />
+              <Skeleton className="h-9 w-32 bg-[#0B1715]" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <Skeleton key={idx} className="h-12 w-full bg-[#0B1715]" />
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-[#07110F] text-[#F2E9DB] p-6 md:p-8 rounded-xl border border-[rgba(196,154,84,0.20)] shadow-2xl">
       {/* Cabecera del Mantenimiento */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[rgba(196,154,84,0.15)] pb-6">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Mantenimiento de Zonas</h1>
-          <p className="text-xs text-muted-foreground mt-1">
+          <h1 className="text-2xl font-bold tracking-tight text-[#C49A54] font-display">Mantenimiento de Zonas</h1>
+          <p className="text-xs text-[#9D9A91] mt-1">
             Administra las áreas físicas del restaurante (ej. Salón Principal, Terraza, VIP).
           </p>
         </div>
-        <Button onClick={handleCreateOpen} size="sm" className="gap-1.5 cursor-pointer self-start">
+        <Button 
+          onClick={handleCreateOpen} 
+          size="sm" 
+          className="gap-1.5 cursor-pointer self-start bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold transition-colors duration-200 border-none"
+        >
           <Plus className="h-4 w-4" />
           Nueva Zona
         </Button>
@@ -76,44 +156,130 @@ export function ZoneManagement() {
 
       {/* Alerta de Error General */}
       {isError && (
-        <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md text-destructive text-xs flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 shrink-0" />
-          <span>No se pudieron cargar las zonas: {error.message}</span>
-        </div>
+        <Alert variant="destructive" className="bg-[#101D1A] border-red-900/50 text-red-200">
+          <AlertTriangle className="h-4 w-4 text-red-500" />
+          <AlertTitle className="text-[#C49A54] text-xs font-semibold">Error de carga</AlertTitle>
+          <AlertDescription className="text-xs text-[#9D9A91] flex items-center justify-between gap-4 mt-1">
+            <span>No se pudieron cargar las zonas de la base de datos.</span>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => window.location.reload()}
+              className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] hover:bg-[#101D1A] text-xs shrink-0 cursor-pointer h-7"
+            >
+              Reintentar
+            </Button>
+          </AlertDescription>
+        </Alert>
       )}
 
-      {/* Tabla de Zonas */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
-        {isLoading ? (
-          <div className="py-20 flex flex-col items-center justify-center gap-3">
-            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            <p className="text-xs text-muted-foreground font-medium">Cargando zonas...</p>
+      {/* Tarjeta de Estadística única (sólo la que tiene datos reales en el modelo) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-[#101D1A] border border-[rgba(196,154,84,0.20)] p-4 rounded-lg flex items-center gap-4 shadow-md transition-all duration-300 hover:border-[#C49A54]/50">
+          <div className="p-3 bg-[#0B1715] rounded-full border border-[rgba(196,154,84,0.15)]">
+            <Map className="h-6 w-6 text-[#C49A54]" />
           </div>
-        ) : !pagedZones || pagedZones.data.length === 0 ? (
-          <div className="py-16 text-center">
-            <p className="text-sm text-muted-foreground font-medium">No se encontraron zonas registradas.</p>
-            <Button variant="link" onClick={handleCreateOpen} className="text-xs text-primary mt-1">
-              Crea tu primera zona ahora
+          <div>
+            <p className="text-xs font-semibold text-[#C49A54] uppercase tracking-wider">Total de zonas</p>
+            <p className="text-2xl font-bold text-[#F2E9DB]">{pagedZones?.totalCount ?? 0}</p>
+            <p className="text-[10px] text-[#9D9A91]">Zonas registradas</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Contenedor Principal (Card grande) */}
+      <div className="bg-[#101D1A] border border-[rgba(196,154,84,0.20)] rounded-lg overflow-hidden shadow-lg p-6 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold text-[#C49A54] font-display">Zonas registradas</h2>
+            <p className="text-xs text-[#9D9A91]">Lista de todas las áreas físicas del restaurante</p>
+          </div>
+          
+          {/* Barra de herramientas */}
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+            {/* Buscador */}
+            <div className="relative flex-1 sm:w-64">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-[#9D9A91]" />
+              <Input
+                type="text"
+                placeholder="Buscar zonas..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 bg-[#0B1715] border-[rgba(196,154,84,0.20)] text-[#F2E9DB] placeholder-[#9D9A91]/50 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] text-xs h-9"
+              />
+            </div>
+            
+            {/* Selector de ordenamiento */}
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-full sm:w-44 bg-[#0B1715] border-[rgba(196,154,84,0.20)] text-[#F2E9DB] text-xs focus:ring-[#C49A54] h-9">
+                <SelectValue placeholder="Ordenar por..." />
+              </SelectTrigger>
+              <SelectContent className="bg-[#101D1A] border-[rgba(196,154,84,0.20)] text-[#F2E9DB]">
+                <SelectItem value="id-asc" className="text-xs focus:bg-[#0B1715] focus:text-[#C49A54] cursor-pointer">Código Ascendente</SelectItem>
+                <SelectItem value="id-desc" className="text-xs focus:bg-[#0B1715] focus:text-[#C49A54] cursor-pointer">Código Descendente</SelectItem>
+                <SelectItem value="name-asc" className="text-xs focus:bg-[#0B1715] focus:text-[#C49A54] cursor-pointer">Nombre A-Z</SelectItem>
+                <SelectItem value="name-desc" className="text-xs focus:bg-[#0B1715] focus:text-[#C49A54] cursor-pointer">Nombre Z-A</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Tabla o Estados Vacíos */}
+        {!pagedZones || pagedZones.data.length === 0 ? (
+          <div className="py-16 text-center space-y-4">
+            <div className="flex justify-center">
+              <div className="p-4 bg-[#0B1715] rounded-full border border-[rgba(196,154,84,0.15)] text-[#C49A54]">
+                <Map className="h-10 w-10 stroke-[1.5]" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-sm font-semibold text-[#C49A54]">Aún no tienes zonas registradas</h3>
+              <p className="text-xs text-[#9D9A91] max-w-xs mx-auto">
+                Crea tu primera zona para comenzar a organizar tu restaurante.
+              </p>
+            </div>
+            <Button 
+              onClick={handleCreateOpen} 
+              size="sm" 
+              className="bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold transition-colors duration-200 mt-2"
+            >
+              <Plus className="h-4 w-4 mr-1.5" />
+              Nueva Zona
+            </Button>
+          </div>
+        ) : sortedData.length === 0 ? (
+          <div className="py-16 text-center space-y-3">
+            <p className="text-sm text-[#9D9A91] font-medium">No se encontraron zonas que coincidan con tu búsqueda.</p>
+            <Button 
+              variant="link" 
+              onClick={() => setSearchQuery('')} 
+              className="text-xs text-[#C49A54] hover:text-[#A98245]"
+            >
+              Limpiar búsqueda
             </Button>
           </div>
         ) : (
-          <>
+          <div className="overflow-x-auto rounded-md border border-[rgba(196,154,84,0.1)]">
             <Table>
-              <TableHeader className="bg-muted">
-                <TableRow>
-                  <TableHead className="w-[120px]">Código ID</TableHead>
-                  <TableHead>Nombre de la Zona</TableHead>
-                  <TableHead className="text-right w-[150px] pr-6">Acciones</TableHead>
+              <TableHeader className="bg-[#0B1715]">
+                <TableRow className="border-b border-[rgba(196,154,84,0.15)] hover:bg-[#0B1715]">
+                  <TableHead className="w-[120px] text-[#C49A54] font-semibold text-xs">Código</TableHead>
+                  <TableHead className="text-[#C49A54] font-semibold text-xs">Nombre de la Zona</TableHead>
+                  <TableHead className="text-right w-[150px] pr-6 text-[#C49A54] font-semibold text-xs">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {pagedZones.data.map((zone) => (
-                  <TableRow key={zone.id} className="hover:bg-muted/50">
-                    <TableCell className="font-mono text-xs text-muted-foreground">
-                      #{zone.id}
+                {sortedData.map((zone) => (
+                  <TableRow 
+                    key={zone.id} 
+                    className="hover:bg-[#0B1715]/40 border-b border-[rgba(196,154,84,0.08)] transition-colors duration-150"
+                  >
+                    <TableCell className="font-mono text-xs text-[#9D9A91]">
+                      #{String(zone.id).padStart(3, '0')}
                     </TableCell>
-                    <TableCell className="text-xs font-semibold text-foreground">
-                      {zone.name}
+                    <TableCell className="text-xs font-semibold text-[#F2E9DB] flex items-center gap-2">
+                      <MapPinned className="h-3.5 w-3.5 text-[#C49A54] shrink-0" />
+                      <span className="capitalize">{zone.name}</span>
                     </TableCell>
                     <TableCell className="text-right pr-6">
                       <DropdownMenu>
@@ -121,30 +287,30 @@ export function ZoneManagement() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-foreground cursor-pointer"
+                            className="h-8 w-8 text-[#9D9A91] hover:text-[#C49A54] hover:bg-[#0B1715] cursor-pointer"
+                            aria-label="Abrir acciones de la zona"
                           >
                             <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Acciones</span>
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="bg-card w-40">
-                          <DropdownMenuLabel className="text-[10px] font-semibold text-muted-foreground px-2 py-1.5 select-none">
+                        <DropdownMenuContent align="end" className="bg-[#101D1A] border border-[rgba(196,154,84,0.2)] w-40 text-[#F2E9DB]">
+                          <DropdownMenuLabel className="text-[10px] font-semibold text-[#9D9A91] px-2 py-1.5 select-none">
                             Opciones de Zona
                           </DropdownMenuLabel>
-                          <DropdownMenuSeparator />
+                          <DropdownMenuSeparator className="bg-[rgba(196,154,84,0.15)]" />
                           <DropdownMenuItem
                             onClick={() => handleEditOpen(zone)}
-                            className="cursor-pointer text-xs"
+                            className="cursor-pointer text-xs focus:bg-[#0B1715] focus:text-[#C49A54]"
                           >
-                            <Edit2 className="mr-2 h-3.5 w-3.5" />
+                            <Edit2 className="mr-2 h-3.5 w-3.5 text-[#C49A54]" />
                             Editar Zona
                           </DropdownMenuItem>
-                          <DropdownMenuSeparator />
+                          <DropdownMenuSeparator className="bg-[rgba(196,154,84,0.15)]" />
                           <DropdownMenuItem
                             onClick={() => handleDeleteOpen(zone)}
-                            className="cursor-pointer text-xs text-destructive focus:text-destructive focus:bg-destructive/10"
+                            className="cursor-pointer text-xs text-red-400 focus:text-red-300 focus:bg-red-950/20"
                           >
-                            <Trash2 className="mr-2 h-3.5 w-3.5" />
+                            <Trash2 className="mr-2 h-3.5 w-3.5 text-red-500" />
                             Eliminar Zona
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -157,33 +323,33 @@ export function ZoneManagement() {
 
             {/* Paginación simple */}
             {pagedZones.totalPages > 1 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-border bg-muted/20">
-                <span className="text-xs text-muted-foreground">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-[rgba(196,154,84,0.1)] bg-[#0B1715]/20">
+                <span className="text-xs text-[#9D9A91]">
                   Página {page} de {pagedZones.totalPages} ({pagedZones.totalCount} registros en total)
                 </span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <Button
                     variant="outline"
                     size="icon"
                     onClick={() => setPage((p) => Math.max(p - 1, 1))}
                     disabled={page === 1}
-                    className="h-7 w-7"
+                    className="h-8 w-8 bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] hover:bg-[#101D1A] hover:text-[#C49A54] disabled:opacity-40 cursor-pointer"
                   >
-                    <ChevronLeft className="h-3.5 w-3.5" />
+                    <ChevronLeft className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="outline"
                     size="icon"
                     onClick={() => setPage((p) => Math.min(p + 1, pagedZones.totalPages))}
                     disabled={page === pagedZones.totalPages}
-                    className="h-7 w-7"
+                    className="h-8 w-8 bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] hover:bg-[#101D1A] hover:text-[#C49A54] disabled:opacity-40 cursor-pointer"
                   >
-                    <ChevronRight className="h-3.5 w-3.5" />
+                    <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
 

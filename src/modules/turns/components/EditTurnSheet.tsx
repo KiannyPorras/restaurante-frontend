@@ -14,20 +14,20 @@ import {
 } from '@/components/ui/sheet'
 import { Loader2 } from 'lucide-react'
 
-// Utilidad local para recortar segundos de TimeSpan a formato HH:MM
-function formatTimeSpan(time: string) {
-  if (!time) return ''
+interface EditTurnSheetProps {
+  isOpen: boolean
+  onOpenChange: (open: boolean) => void
+  turn: TurnResponse | null
+}
+
+// Utilidad local para pasar del formato TimeSpan (ej. "08:00:00") a input time (ej. "08:00")
+function convertToInputTime(time: string | undefined): string {
+  if (!time) return '08:00'
   const parts = time.split(':')
   if (parts.length >= 2) {
     return `${parts[0]}:${parts[1]}`
   }
   return time
-}
-
-interface EditTurnSheetProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-  turn: TurnResponse | null
 }
 
 export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps) {
@@ -41,18 +41,14 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
     },
     onSubmit: async ({ value }) => {
       if (!turn) return
-      // Formatear a formato HH:MM:00 requerido por TimeSpan
-      const formattedStart = value.startTime.includes(':') && value.startTime.split(':').length === 2 
-        ? `${value.startTime}:00` 
-        : value.startTime
-      const formattedEnd = value.endTime.includes(':') && value.endTime.split(':').length === 2 
-        ? `${value.endTime}:00` 
-        : value.endTime
-
       try {
         await updateMutation.mutateAsync({
           id: turn.id,
-          turn: { name: value.name, startTime: formattedStart, endTime: formattedEnd },
+          turn: {
+            name: value.name,
+            startTime: value.startTime,
+            endTime: value.endTime,
+          },
         })
         onOpenChange(false)
       } catch (err) {
@@ -61,22 +57,22 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
     },
   })
 
-  // Sincronizar campos al abrir para edición
+  // Sincronizar campos al cargar item a editar
   useEffect(() => {
     if (turn && isOpen) {
       form.setFieldValue('name', turn.name)
-      form.setFieldValue('startTime', formatTimeSpan(turn.startTime))
-      form.setFieldValue('endTime', formatTimeSpan(turn.endTime))
+      form.setFieldValue('startTime', convertToInputTime(turn.startTime))
+      form.setFieldValue('endTime', convertToInputTime(turn.endTime))
     }
   }, [turn, isOpen])
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-md bg-card">
-        <SheetHeader className="pb-6">
-          <SheetTitle>Editar Turno</SheetTitle>
-          <SheetDescription className="text-xs text-muted-foreground">
-            Modifica los horarios de atención y el nombre del turno.
+      <SheetContent className="sm:max-w-md bg-[#101D1A] border-l border-[rgba(196,154,84,0.2)] text-[#F2E9DB]">
+        <SheetHeader className="pb-6 border-b border-[rgba(196,154,84,0.1)]">
+          <SheetTitle className="text-[#C49A54] font-serif text-lg">Editar Turno</SheetTitle>
+          <SheetDescription className="text-xs text-[#9D9A91]">
+            Modifica los datos del turno de servicio del restaurante.
           </SheetDescription>
         </SheetHeader>
 
@@ -86,7 +82,7 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
             e.stopPropagation()
             form.handleSubmit()
           }}
-          className="space-y-4"
+          className="space-y-6 mt-6"
         >
           {/* Campo: Nombre */}
           <form.Field
@@ -95,14 +91,14 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
               onChange: ({ value }) =>
                 !value
                   ? 'El nombre es obligatorio'
-                  : value.trim().length === 0
-                  ? 'No puede estar vacío'
+                  : value.length < 3
+                  ? 'Debe tener al menos 3 caracteres'
                   : undefined,
             }}
           >
             {(field) => (
-              <div className="space-y-1.5">
-                <Label htmlFor={field.name} className="text-xs font-semibold">
+              <div className="space-y-2">
+                <Label htmlFor={field.name} className="text-xs font-semibold text-[#C49A54] tracking-wide">
                   Nombre del Turno
                 </Label>
                 <Input
@@ -111,12 +107,12 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="Ej. Almuerzo, Cena VIP"
-                  className="bg-background"
+                  placeholder="Ej. Almuerzo Ejecutivo"
+                  className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                   disabled={updateMutation.isPending}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                  <p className="text-[10px] text-destructive font-medium">
+                  <p className="text-[10px] text-red-400 font-medium">
                     {field.state.meta.errors.join(', ')}
                   </p>
                 ) : null}
@@ -128,13 +124,13 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
           <form.Field
             name="startTime"
             validators={{
-              onChange: ({ value }) => !value ? 'La hora de inicio es obligatoria' : undefined,
+              onChange: ({ value }) => (!value ? 'La hora de inicio es obligatoria' : undefined),
             }}
           >
             {(field) => (
-              <div className="space-y-1.5">
-                <Label htmlFor={field.name} className="text-xs font-semibold">
-                  Hora de Inicio (Entrada)
+              <div className="space-y-2">
+                <Label htmlFor={field.name} className="text-xs font-semibold text-[#C49A54] tracking-wide">
+                  Hora de Inicio
                 </Label>
                 <Input
                   id={field.name}
@@ -143,11 +139,11 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  className="bg-background"
+                  className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs cursor-pointer block w-full"
                   disabled={updateMutation.isPending}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                  <p className="text-[10px] text-destructive font-medium">
+                  <p className="text-[10px] text-red-400 font-medium">
                     {field.state.meta.errors.join(', ')}
                   </p>
                 ) : null}
@@ -159,13 +155,13 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
           <form.Field
             name="endTime"
             validators={{
-              onChange: ({ value }) => !value ? 'La hora de cierre es obligatoria' : undefined,
+              onChange: ({ value }) => (!value ? 'La hora de cierre es obligatoria' : undefined),
             }}
           >
             {(field) => (
-              <div className="space-y-1.5">
-                <Label htmlFor={field.name} className="text-xs font-semibold">
-                  Hora de Cierre (Corte)
+              <div className="space-y-2">
+                <Label htmlFor={field.name} className="text-xs font-semibold text-[#C49A54] tracking-wide">
+                  Hora de Cierre
                 </Label>
                 <Input
                   id={field.name}
@@ -174,11 +170,11 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  className="bg-background"
+                  className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs cursor-pointer block w-full"
                   disabled={updateMutation.isPending}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                  <p className="text-[10px] text-destructive font-medium">
+                  <p className="text-[10px] text-red-400 font-medium">
                     {field.state.meta.errors.join(', ')}
                   </p>
                 ) : null}
@@ -190,20 +186,34 @@ export function EditTurnSheet({ isOpen, onOpenChange, turn }: EditTurnSheetProps
             selector={(state) => [state.canSubmit, state.isSubmitting]}
           >
             {([canSubmit, isSubmitting]) => (
-              <Button
-                type="submit"
-                disabled={!canSubmit || isSubmitting || updateMutation.isPending}
-                className="w-full mt-6"
-              >
-                {updateMutation.isPending ? (
-                  <div className="flex items-center justify-center gap-1.5">
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    <span>Guardando...</span>
-                  </div>
-                ) : (
-                  <span>Guardar Turno</span>
-                )}
-              </Button>
+              <div className="flex gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    form.reset()
+                    onOpenChange(false)
+                  }}
+                  disabled={updateMutation.isPending}
+                  className="flex-1 bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] hover:bg-[#101D1A] hover:text-[#C49A54] text-xs h-10"
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={!canSubmit || isSubmitting || updateMutation.isPending}
+                  className="flex-1 bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold transition-colors duration-200 border-none text-xs h-10"
+                >
+                  {updateMutation.isPending ? (
+                    <div className="flex items-center justify-center gap-1.5">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span>Guardando...</span>
+                    </div>
+                  ) : (
+                    <span>Guardar</span>
+                  )}
+                </Button>
+              </div>
             )}
           </form.Subscribe>
         </form>

@@ -23,13 +23,13 @@ export function LoginForm() {
   })
 
   return (
-    <Card className="bg-card border border-border w-full max-w-sm">
+    <Card className="bg-[#101D1A] border border-[rgba(196,154,84,0.2)] w-full max-w-sm text-[#F2E9DB] shadow-2xl p-2">
       <CardHeader className="items-center space-y-3 pb-6 text-center">
         <div>
-          <CardTitle className="font-bold text-foreground text-xl tracking-tight">
+          <CardTitle className="font-bold text-[#C49A54] text-xl font-serif tracking-tight">
             Ingreso al Sistema
           </CardTitle>
-          <CardDescription className="mt-1 text-muted-foreground text-xs">
+          <CardDescription className="mt-1.5 text-[#9D9A91] text-xs">
             Digita tus credenciales para acceder al panel.
           </CardDescription>
         </div>
@@ -38,11 +38,11 @@ export function LoginForm() {
       <CardContent>
         {/* Manejo de Errores de API */}
         {loginMutation.isError && (
-          <div className="flex items-start gap-2 bg-destructive/10 mb-4 p-3 border border-destructive/20 rounded-md text-destructive text-xs">
-            <AlertCircle className="mt-0.5 w-4 h-4 shrink-0" />
+          <div className="flex items-start gap-2 bg-red-950/20 mb-4 p-3 border border-red-500/20 rounded-md text-red-200 text-xs">
+            <AlertCircle className="mt-0.5 w-4 h-4 text-red-400 shrink-0" />
             <div className="flex-1">
-              <p className="font-semibold">Error de inicio de sesión</p>
-              <p className="mt-0.5">{loginMutation.error.message}</p>
+              <p className="font-semibold text-[#C49A54] text-[11px] uppercase tracking-wide">Error de inicio de sesión</p>
+              <p className="mt-1 text-red-300/90">{loginMutation.error.message}</p>
             </div>
           </div>
         )}
@@ -53,7 +53,7 @@ export function LoginForm() {
             e.stopPropagation()
             form.handleSubmit()
           }}
-          className="space-y-4"
+          className="space-y-5"
         >
           {/* Campo: Usuario */}
           <form.Field
@@ -63,8 +63,8 @@ export function LoginForm() {
             }}
           >
             {(field) => (
-              <div className="space-y-1.5">
-                <Label htmlFor={field.name} className="font-medium text-foreground text-xs">
+              <div className="space-y-2">
+                <Label htmlFor={field.name} className="font-semibold text-[#C49A54] tracking-wide text-xs">
                   Usuario
                 </Label>
                 <Input
@@ -74,11 +74,11 @@ export function LoginForm() {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="admin"
-                  className="bg-background"
+                  className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                   disabled={loginMutation.isPending}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                  <p className="mt-1 font-medium text-[10px] text-destructive">
+                  <p className="mt-1 font-medium text-[10px] text-red-400">
                     {field.state.meta.errors.join(', ')}
                   </p>
                 ) : null}
@@ -94,8 +94,8 @@ export function LoginForm() {
             }}
           >
             {(field) => (
-              <div className="space-y-1.5">
-                <Label htmlFor={field.name} className="font-medium text-foreground text-xs">
+              <div className="space-y-2">
+                <Label htmlFor={field.name} className="font-semibold text-[#C49A54] tracking-wide text-xs">
                   Contraseña
                 </Label>
                 <Input
@@ -106,11 +106,11 @@ export function LoginForm() {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder="••••••••"
-                  className="bg-background"
+                  className="bg-[#0B1715] border-[rgba(196,154,84,0.2)] text-[#F2E9DB] placeholder-[#9D9A91]/40 focus-visible:ring-[#C49A54] focus-visible:border-[#C49A54] h-10 text-xs"
                   disabled={loginMutation.isPending}
                 />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
-                  <p className="mt-1 font-medium text-[10px] text-destructive">
+                  <p className="mt-1 font-medium text-[10px] text-red-400">
                     {field.state.meta.errors.join(', ')}
                   </p>
                 ) : null}
@@ -125,7 +125,7 @@ export function LoginForm() {
               <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting || loginMutation.isPending}
-                className="mt-4 w-full cursor-pointer"
+                className="mt-6 w-full cursor-pointer bg-[#C49A54] hover:bg-[#A98245] text-[#07110F] font-semibold transition-colors duration-200 border-none h-10 text-xs"
               >
                 {loginMutation.isPending ? (
                   <div className="flex justify-center items-center gap-1.5">
