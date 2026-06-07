@@ -99,7 +99,7 @@ export function Landing() {
       {/* Footer simple */}
       <footer className="w-full border-t border-border py-6 text-center text-xs text-muted-foreground">
         <div className="container mx-auto px-6">
-          <p>© {new Date().getFullYear()} ChefStack. Construido con React 19 y la Suite de TanStack.</p>
+          <p suppressHydrationWarning>© {new Date().getFullYear()} ChefStack. Construido con React 19 y la Suite de TanStack.</p>
         </div>
       </footer>
     </div>

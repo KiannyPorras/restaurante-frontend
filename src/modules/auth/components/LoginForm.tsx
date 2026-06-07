@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Pizza, Loader2, AlertCircle } from 'lucide-react'
+import { Loader2, AlertCircle } from 'lucide-react'
 
 export function LoginForm() {
   const loginMutation = useLogin()
@@ -61,7 +61,8 @@ export function LoginForm() {
             validators={{
               onChange: ({ value }) => !value ? 'El nombre de usuario es obligatorio' : undefined,
             }}
-            children={(field) => (
+          >
+            {(field) => (
               <div className="space-y-1.5">
                 <Label htmlFor={field.name} className="font-medium text-foreground text-xs">
                   Usuario
@@ -83,7 +84,7 @@ export function LoginForm() {
                 ) : null}
               </div>
             )}
-          />
+          </form.Field>
 
           {/* Campo: Contraseña */}
           <form.Field
@@ -91,7 +92,8 @@ export function LoginForm() {
             validators={{
               onChange: ({ value }) => !value ? 'La contraseña es obligatoria' : undefined,
             }}
-            children={(field) => (
+          >
+            {(field) => (
               <div className="space-y-1.5">
                 <Label htmlFor={field.name} className="font-medium text-foreground text-xs">
                   Contraseña
@@ -114,11 +116,12 @@ export function LoginForm() {
                 ) : null}
               </div>
             )}
-          />
+          </form.Field>
 
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting]}
-            children={([canSubmit, isSubmitting]) => (
+          >
+            {([canSubmit, isSubmitting]) => (
               <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting || loginMutation.isPending}
@@ -134,7 +137,7 @@ export function LoginForm() {
                 )}
               </Button>
             )}
-          />
+          </form.Subscribe>
         </form>
       </CardContent>
     </Card>

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { login } from '../services/authService'
 import type { LoginRequest, LoginResponse } from '../models/authModels'
@@ -6,6 +6,7 @@ import axios from 'axios'
 
 export function useLogin() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   return useMutation<LoginResponse, Error, LoginRequest>({
     mutationFn: (credentials) => login(credentials),
@@ -15,6 +16,9 @@ export function useLogin() {
       localStorage.setItem('chefstack_role', data.role)
       localStorage.setItem('chefstack_expires_at', data.expiresAt)
       
+      // Invalidar consultas de autenticación para sincronizar el estado
+      queryClient.invalidateQueries({ queryKey: ['auth'] })
+
       // Redirigir al dashboard tras un login exitoso
       navigate({ to: '/dashboard' })
     },

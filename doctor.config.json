@@ -1,0 +1,8 @@
+{
+  "ignore": {
+    "rules": [
+      "react-doctor/no-multi-comp",
+      "no-multi-comp"
+    ]
+  }
+}

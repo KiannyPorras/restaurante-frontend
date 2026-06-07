@@ -9,14 +9,13 @@ export async function login(credentials: LoginRequest): Promise<LoginResponse> {
   return data
 }
 
-/**
- * Cierra la sesión activa removiendo los datos del token en localStorage.
- */
+/*
 export function logout(): void {
   localStorage.removeItem('chefstack_token')
   localStorage.removeItem('chefstack_role')
   localStorage.removeItem('chefstack_expires_at')
 }
+*/
 
 /**
  * Valida si el usuario actual cuenta con una sesión activa y no expirada.
