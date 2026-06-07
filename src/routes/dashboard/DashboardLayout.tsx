@@ -55,7 +55,9 @@ export function DashboardLayout() {
 
             {/* Contenedor del Outlet */}
             <main className="flex-1 p-6 md:p-8 overflow-y-auto">
-              <Outlet />
+              <div className="max-w-5xl mx-auto w-full">
+                <Outlet />
+              </div>
             </main>
           </SidebarInset>
 

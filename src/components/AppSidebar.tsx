@@ -30,6 +30,10 @@ import {
   Search,
   BookOpen,
   UserCheck,
+  Map,
+  Layers,
+  Calendar,
+  Grid,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -56,9 +60,18 @@ export function AppSidebar() {
     },
   ]
 
+  // Lista de items de mantenimiento en la barra
+  const operationsItems = [
+    { name: 'Panel Principal', path: '/dashboard', icon: LayoutDashboard },
+    { name: 'Zonas', path: '/dashboard/zones', icon: Map },
+    { name: 'Secciones', path: '/dashboard/sections', icon: Layers },
+    { name: 'Mesas', path: '/dashboard/tables', icon: Grid },
+    { name: 'Turnos', path: '/dashboard/turns', icon: Calendar },
+  ]
+
   return (
     <Sidebar collapsible="icon" className="border-r border-border bg-sidebar">
-      {/* Cabecera del Sidebar (Estilos puros shadcn) */}
+      {/* Cabecera del Sidebar */}
       <SidebarHeader className="h-16 border-b border-border px-4 flex items-center justify-between">
         <div className="flex items-center gap-2.5 overflow-hidden group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
           <div className="p-2 bg-primary text-primary-foreground rounded-lg shrink-0">
@@ -91,7 +104,7 @@ export function AppSidebar() {
           </div>
         </div>
 
-        {/* Grupo 1: Operaciones */}
+        {/* Grupo 1: Operaciones (Acordeón expandido con enlaces de mantenimientos) */}
         <SidebarGroup>
           <SidebarGroupLabel className="group-data-[collapsible=icon]:hidden">
             Plataforma
@@ -109,13 +122,20 @@ export function AppSidebar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild isActive={currentPath === '/dashboard'}>
-                          <Link to="/dashboard">
-                            <span>Panel Principal</span>
-                          </Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
+                      {operationsItems.map((item) => {
+                        const Icon = item.icon
+                        const isActive = currentPath === item.path
+                        return (
+                          <SidebarMenuSubItem key={item.name}>
+                            <SidebarMenuSubButton asChild isActive={isActive}>
+                              <Link to={item.path} className="flex items-center gap-2">
+                                <Icon className="h-3.5 w-3.5" />
+                                <span>{item.name}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        )
+                      })}
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </SidebarMenuItem>
