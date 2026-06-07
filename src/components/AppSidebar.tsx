@@ -35,6 +35,8 @@ import {
   Layers,
   Calendar,
   Grid,
+  Clock,
+  Lock,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -68,6 +70,8 @@ export function AppSidebar() {
     { name: 'Secciones', path: '/dashboard/sections', icon: Layers },
     { name: 'Mesas', path: '/dashboard/tables', icon: Grid },
     { name: 'Turnos', path: '/dashboard/turns', icon: Calendar },
+    { name: 'Lista de Espera', path: '/dashboard/waiting-list', icon: Clock },
+    { name: 'Bloqueos de Mesa', path: '/dashboard/locks', icon: Lock },
   ]
 
   return (

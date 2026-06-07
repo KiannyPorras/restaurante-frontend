@@ -7,6 +7,8 @@ import { Zones } from './routes/dashboard/Zones'
 import { Sections } from './routes/dashboard/Sections'
 import { Tables } from './routes/dashboard/Tables'
 import { Turns } from './routes/dashboard/Turns'
+import { WaitingListRoute } from './routes/dashboard/WaitingListRoute'
+import { LocksRoute } from './routes/dashboard/LocksRoute'
 
 // 1. Ruta Raíz Principal
 const rootRoute = createRootRoute({
@@ -66,6 +68,18 @@ const turnsRoute = createRoute({
   component: Turns,
 })
 
+const waitingListRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: '/waiting-list',
+  component: WaitingListRoute,
+})
+
+const locksRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: '/locks',
+  component: LocksRoute,
+})
+
 // 7. Creación del árbol de enrutamiento
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -76,6 +90,8 @@ const routeTree = rootRoute.addChildren([
     sectionsRoute,
     tablesRoute,
     turnsRoute,
+    waitingListRoute,
+    locksRoute,
   ]),
 ])
 
