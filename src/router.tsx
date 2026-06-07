@@ -1,7 +1,7 @@
 import { createRootRoute, createRoute, createRouter, Outlet } from '@tanstack/react-router'
 import { Landing } from './routes/Landing'
 import { DashboardLayout } from './routes/dashboard/DashboardLayout'
-import { Home } from './routes/Home'
+import { DashboardHome } from './routes/dashboard/DashboardHome'
 
 // 1. Ruta Raíz Principal
 const rootRoute = createRootRoute({
@@ -26,7 +26,7 @@ const dashboardRoute = createRoute({
 const dashboardIndexRoute = createRoute({
   getParentRoute: () => dashboardRoute,
   path: '/',
-  component: Home,
+  component: DashboardHome,
 })
 
 // 5. Creación del árbol de enrutamiento
