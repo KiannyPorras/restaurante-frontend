@@ -20,9 +20,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 
 // Iconos
-import { Loader2, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertTriangle, ToggleLeft, ToggleRight } from 'lucide-react'
+import { Loader2, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertTriangle, ToggleLeft, ToggleRight, MoreHorizontal } from 'lucide-react'
 
 export function TableManagement() {
   const [page, setPage] = useState(1)
@@ -144,39 +152,56 @@ export function TableManagement() {
                       </span>
                     </TableCell>
                     <TableCell className="text-right pr-6">
-                      <div className="flex justify-end gap-1.5">
-                        {/* Activar/Desactivar Interruptor */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleToggleActive(table)}
-                          title={table.isActive ? 'Desactivar mesa' : 'Activar mesa'}
-                          disabled={toggleMutation.isPending}
-                          className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted"
-                        >
-                          {table.isActive ? (
-                            <ToggleRight className="h-4.5 w-4.5 text-primary" />
-                          ) : (
-                            <ToggleLeft className="h-4.5 w-4.5 text-muted-foreground" />
-                          )}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleEditOpen(table)}
-                          className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted"
-                        >
-                          <Edit2 className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteOpen(table)}
-                          className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-foreground cursor-pointer"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Acciones</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="bg-card w-48">
+                          <DropdownMenuLabel className="text-[10px] font-semibold text-muted-foreground px-2 py-1.5 select-none">
+                            Opciones de Mesa
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleToggleActive(table)}
+                            disabled={toggleMutation.isPending}
+                            className="cursor-pointer text-xs"
+                          >
+                            {table.isActive ? (
+                              <>
+                                <ToggleRight className="mr-2 h-4.5 w-4.5 text-primary" />
+                                Desactivar Mesa
+                              </>
+                            ) : (
+                              <>
+                                <ToggleLeft className="mr-2 h-4.5 w-4.5 text-muted-foreground" />
+                                Activar Mesa
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleEditOpen(table)}
+                            className="cursor-pointer text-xs"
+                          >
+                            <Edit2 className="mr-2 h-3.5 w-3.5" />
+                            Editar Mesa
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteOpen(table)}
+                            className="cursor-pointer text-xs text-destructive focus:text-destructive focus:bg-destructive/10"
+                          >
+                            <Trash2 className="mr-2 h-3.5 w-3.5" />
+                            Eliminar Mesa
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}

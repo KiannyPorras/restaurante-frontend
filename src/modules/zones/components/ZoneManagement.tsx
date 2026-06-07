@@ -17,9 +17,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 
 // Iconos
-import { Loader2, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertTriangle } from 'lucide-react'
+import { Loader2, Plus, Edit2, Trash2, ChevronLeft, ChevronRight, AlertTriangle, MoreHorizontal } from 'lucide-react'
 
 export function ZoneManagement() {
   const [page, setPage] = useState(1)
@@ -108,24 +116,39 @@ export function ZoneManagement() {
                       {zone.name}
                     </TableCell>
                     <TableCell className="text-right pr-6">
-                      <div className="flex justify-end gap-1.5">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleEditOpen(zone)}
-                          className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted"
-                        >
-                          <Edit2 className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteOpen(zone)}
-                          className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-foreground cursor-pointer"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Acciones</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="bg-card w-40">
+                          <DropdownMenuLabel className="text-[10px] font-semibold text-muted-foreground px-2 py-1.5 select-none">
+                            Opciones de Zona
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleEditOpen(zone)}
+                            className="cursor-pointer text-xs"
+                          >
+                            <Edit2 className="mr-2 h-3.5 w-3.5" />
+                            Editar Zona
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteOpen(zone)}
+                            className="cursor-pointer text-xs text-destructive focus:text-destructive focus:bg-destructive/10"
+                          >
+                            <Trash2 className="mr-2 h-3.5 w-3.5" />
+                            Eliminar Zona
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
